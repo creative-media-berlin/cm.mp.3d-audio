@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Demo clients</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <style>
+        .activity{
+            background: red;
+            height: 20px;
+            width: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Demo Clients</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Player client:</h3>
+            <div class="activity" id="player1-demo-state">1</div>
+            <div id="player1-demo-data"></div>
+            <div class="activity" id="player2-demo-state">2</div>
+            <div id="player2-demo-data"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Kinect client:</h3>
+            <div class="activity" id="kinect-demo-state"></div>
+            <div id="kinect-demo-data"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Game Master client:</h3>
+            <div class="activity" id="game-master-demo-state"></div>
+            <div id="game-master-demo-data"></div>
+            <button id="start-game" type="button" class="btn btn-block btn-success">start Game</button>
+            <button id="start-game-1" type="button" class="btn btn-block btn-success">start Game 1</button>
+            <button id="stop-game" type="button" class="btn btn-block btn-success">stop Game</button>
+            <button id="reset-player-vd" type="button" class="btn btn-block btn-success">reset-player-vd</button>
+        </div>
+    </div>
+</div>
+</div>
+
+
+</body>
+<script>
+//    var serverIP = '192.168.178.23';
+    var serverIP = '127.0.0.1';
+//    var serverIP = '141.45.200.67'
+//    var serverIP = '172.22.42.113'
+//    var serverIP = '192.168.2.103'
+//var serverIP =  '141.45.201.40'
+</script>
+<!--<script src="http://192.168.178.23:8080/socket.io/socket.io.js"></script>-->
+<!--<script src="http://172.22.42.113:8080/socket.io/socket.io.js"></script>-->
+<!--<script src="http://141.45.200.67:8080/socket.io/socket.io.js"></script>-->
+<script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
+<!--<script src="http://192.168.2.103:8080/socket.io/socket.io.js"></script>-->
+<!--<script src="http://141.45.201.40:8080/socket.io/socket.io.js"></script>-->
+<!--<script src="player-demo.js"></script>-->
+<!--script src="kinect-demo.js"></script-->
+<!--<script src="gameMaster-demo.js"></script>-->
+</html>

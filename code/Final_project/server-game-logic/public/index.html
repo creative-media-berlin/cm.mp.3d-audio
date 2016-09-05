@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>server client test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="resources/extern_scripts/jquery-2.2.4.min.js"></script>
+    <script src="resources/extern_scripts/binaural-fir.min.js"></script>
+    <script src="resources/extern_scripts/complete_hrtfs.js"></script>
+    <script src="helper/sphericalCalculation.js"></script>
+    <script src="helper/vectorOperations.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="resources/extern_scripts/bootstrap.min.css">
+    <style>
+        #server-data2, #output-view-direction2, #sound-debug-text2 {
+            background-color: lightcyan;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>InteractSound</h1>
+            <h3>Choose player:</h3>
+            <div class="btn-group" role="group">
+                <button id="1" type="button" class="btn btn-block btn-success">Player 1</button>
+                <button id="2" type="button" class="btn btn-block btn-success">Player 2</button>
+                <button id="stop" type="button" class="btn btn-block btn-danger">Stop</button>
+                <button id="match" type="button" class="btn btn-block btn-info">Match collectable location</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>view direction (local):</h3>
+            <div id="output-view-direction"></div>
+            <div id="output-view-direction2"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>connected to server:</h3>
+            <div id="server-connection">NO</div>
+
+            <h3>data from server:</h3>
+            <div id="server-data"></div>
+            <div id="server-data2">server-data2</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>game-logs:</h3>
+            <div id="room"></div>
+            <div id="game-logs"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>sound-debug-text:</h3>
+            <div id="sound-debug-text2"></div>
+            <div id="sound-debug-text"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+    document.getElementById('1').disabled = true;
+    document.getElementById('2').disabled = true;
+    document.getElementById('stop').disabled = true;
+    document.getElementById('match').disabled = true;
+
+    var soundDebugContainer = document.getElementById('sound-debug-text');
+    soundDebugContainer.innerHTML = "load sounds ... "
+
+    var SoundTypes = [
+        "/player/resources/audio/level1/collectables/cat.mp3",
+        "/player/resources/audio/level2/collectables/mu_platform1.mp3",
+        "/player/resources/audio/level2/collectables/mu_platform2.mp3",
+        "/player/resources/audio/level2/collectables/mu_platform3.mp3",
+        "/player/resources/audio/level2/collectables/mu_platform4.mp3",
+        "/player/resources/audio/level3/collectables/ts_ringtone1.mp3",
+        "/player/resources/audio/level3/collectables/ts_ringtone2.mp3",
+        "/player/resources/audio/level3/collectables/ts_ringtone3.mp3",
+        "/player/resources/audio/level3/collectables/ts_ringtone4.mp3",
+        "/player/resources/audio/level4/collectables/wo_bird1.mp3",
+        "/player/resources/audio/level4/collectables/wo_bird2.mp3",
+        "/player/resources/audio/level4/collectables/wo_bird3.mp3",
+        "/player/resources/audio/level1/seagull1_mono.mp3",
+        "/player/resources/audio/level1/ocean_waves_mono.mp3",
+        "/player/resources/audio/level2/mu_rhythm.mp3",
+        "/player/resources/audio/level2/mu_bass.mp3",
+        "/player/resources/audio/level2/mu_reich_one.mp3",
+        "/player/resources/audio/level2/mu_reich_two.mp3",
+        "/player/resources/audio/level2/mu_fifths.mp3",
+        "/player/resources/audio/level2/mu_others.mp3",
+        "/player/resources/audio/level3/ts_train_station_atmo.mp3",
+        "/player/resources/audio/level3/ts_pidgeons.mp3",
+        "/player/resources/audio/level3/ts_station_announcement.mp3",
+        "/player/resources/audio/level3/ts_ticket_validations.mp3",
+        "/player/resources/audio/level4/wo_stream.mp3",
+        "/player/resources/audio/level4/wo_wind.mp3",
+        "/player/resources/audio/announcements/anno_game_ready.mp3",
+        "/player/resources/audio/announcements/anno_game_started.mp3",
+        "/player/resources/audio/announcements/anno_game_stopped.mp3",
+        "/player/resources/audio/announcements/anno_player_1_collectable.mp3",
+        "/player/resources/audio/announcements/anno_player_2_collectable.mp3",
+        "/player/resources/audio/announcements/anno_player1_won_game.mp3",
+        "/player/resources/audio/announcements/anno_player2_won_game.mp3",
+        "/player/resources/audio/announcements/anno_music_synths.mp3",
+        "/player/resources/audio/announcements/anno_synth.mp3",
+        "/player/resources/audio/announcements/anno_mobilePhones.mp3",
+        "/player/resources/audio/announcements/anno_birds.mp3",
+        "/player/resources/audio/announcements/anno_cat.mp3",
+        "/player/resources/audio/level1/footsteps/footSingleStep1.mp3",
+        "/player/resources/audio/level1/footsteps/footSingleStep2.mp3",
+        "/player/resources/audio/level2/footsteps/footSingleStep1.mp3",
+        "/player/resources/audio/level2/footsteps/footSingleStep2.mp3",
+        "/player/resources/audio/level3/footsteps/footSingleStep1.mp3",
+        "/player/resources/audio/level3/footsteps/footSingleStep2.mp3",
+        "/player/resources/audio/level4/footsteps/wo_footStep1.mp3",
+        "/player/resources/audio/level4/footsteps/wo_footStep2.mp3"
+    ]
+
+    var soundBuffers = {}
+    var g_WebAudioContext = null
+
+
+    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    var showConsoleLogs = true
+    if (iOS) {
+        showConsoleLogs = false
+    }
+
+    function load(url, callback) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.responseType = 'arraybuffer';
+
+        // Decode asynchronously
+        request.onload = function () {
+//                soundDebugContainer.innerHTML += "onload: ..."
+            g_WebAudioContext.decodeAudioData(request.response, function (buffer) {
+                callback(url, buffer, null);
+            }, function (error) {
+                callback(url, null, error);
+            });
+        }
+        request.send();
+    }
+
+    function loadSounds(callback) {
+        var counter = SoundTypes.length
+        SoundTypes.forEach(function (url) {
+            load(url, function (url, buffer, error) {
+                if (error) {
+                    soundDebugContainer.innerHTML += "error: " + error + "<br>"
+                } else {
+                    console.log("loaded: " + url)
+                    if (buffer && showConsoleLogs) soundDebugContainer.innerHTML += "loaded: " + url + "<br>"
+                    soundBuffers[url] = buffer
+                    counter--
+                    if (counter == 0 && callback) callback()
+                }
+            })
+        })
+    }
+
+
+    // iOS audio context bug fix
+
+    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    g_WebAudioContext = new AudioContext();
+    soundDebugContainer.innerHTML += "AudioContext()<br>"
+
+    var isUnlocked = false;
+    function unlock() {
+
+        //     create empty buffer and play it
+        var buffer = g_WebAudioContext.createBuffer(1, 1, 22050);
+        var source = g_WebAudioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(g_WebAudioContext.destination);
+        source.start(0);
+
+        if (showConsoleLogs) soundDebugContainer.innerHTML += "<br>unlocked sound played";
+
+        //  by checking the play state after some time, we know if we're really unlocked
+        setTimeout(function () {
+            if ((source.playbackState === source.PLAYING_STATE || source.playbackState === source.FINISHED_STATE)) {
+                isUnlocked = true;
+                if (showConsoleLogs) soundDebugContainer.innerHTML += "<br>sound unlock state " + isUnlocked;
+                window.removeEventListener("touchstart", unlock, false);
+            }
+        }, 10);
+    }
+    if (showConsoleLogs) soundDebugContainer.innerHTML = "sound unlock state " + isUnlocked
+    window.addEventListener("touchstart", unlock, false);
+
+
+    loadSounds(function () {
+        console.log("ready! ")
+        soundDebugContainer.innerHTML += "all sounds preloaded :) " + "<br>"
+
+        document.getElementById('1').disabled = false;
+        document.getElementById('2').disabled = false;
+        document.getElementById('stop').disabled = false;
+        document.getElementById('match').disabled = false;
+
+        var source1 = g_WebAudioContext.createBufferSource();
+        source1.buffer = soundBuffers["/player/resources/audio/announcements/anno_game_ready.mp3"];
+        source1.connect(g_WebAudioContext.destination);
+        source1.start(0);
+
+    })
+
+</script>
+<script src="bundle.js"></script>
+
+</html>

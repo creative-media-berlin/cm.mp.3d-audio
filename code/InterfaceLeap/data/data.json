@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "playerCollection": {
+        "items": []
+      },
+      "level": {
+        "id": 1,
+        "collectables": null,
+        "ambientSounds": null
+      },
+      "mode": 0,
+      "room": null
+    }
+  ]
+}

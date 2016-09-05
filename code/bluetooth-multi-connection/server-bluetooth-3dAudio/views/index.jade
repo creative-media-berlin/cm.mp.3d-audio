@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1= title
+  p You should hear someone walking through the forest (circle wise)  #{title}
+  canvas(id= 'application-canvas')
+  script(src='/javascripts/lib/playcanvas.js')
+  script(src='/javascripts/playcanvas-test-1.js')

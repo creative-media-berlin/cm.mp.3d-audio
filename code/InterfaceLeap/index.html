@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>server client test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./jquery-1.11.1.min.js"></script>
+    <script src="./binaural-fir.min.js"></script>
+    <script src="./complete_hrtfs.js"></script>
+
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.js"></script>-->
+
+    <!--<style>-->
+        <!--body {-->
+            <!--margin: 0;-->
+        <!--}-->
+
+        <!--#guiContainer {-->
+            <!--position: fixed;-->
+            <!--top: 0;-->
+            <!--left: 0;-->
+        <!--}-->
+    <!--</style>-->
+</head>
+
+<body>
+<div id="guiContainer"></div>
+<div id="debug-text"></div>
+
+</body>
+
+<!--
+<script type='text/javascript'>
+
+    $.getScript("./binaural-fir.min.js").done(function () {
+        $.getScript("./complete_hrtfs.js").done(function () {
+            $.getScript("./jquery.knob.js").done(function () {
+                $.getScript("./3daudio.js")
+                $.getScript("resources/three.js")
+                $.getScript("PointerLockControls.js")
+                $.getScript("mathOperations.js")
+                $.getScript("scene.js").done(function(){
+                    console.log("cameraHeight: " + cameraHeight)
+                }).fail(function(){
+                    console.log("failed: ")
+                })
+            })
+        })
+    })
+-->
+
+<script src="./3daudio.js"></script>
+<script src="./resources/three.js"></script>
+<script src="./PointerLockControls.js"></script>
+<script src="./mathOperations.js"></script>
+<script src="./scene.js"></script>
+
+
+
+</script>
+</html>

@@ -1,0 +1,109 @@
+<html>
+<head>
+    <script src="resources/three.js"></script>
+    <script src="resources/socket.io-1.4.5.js"></script>
+    <script src="resources/leap-0.6.2.min.js"></script>
+    <script src="resources/leap-plugins-0.1.6.1.min.js"></script>
+    <script src="resources/leap.rigged-hand-0.1.4.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="resources/bootstrap.min.css">
+
+
+    <style>
+        body {
+            background: #00000f;
+        }
+
+        #player-scores {
+            padding: 0 10px;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+
+        #buttons{
+            position: fixed;
+            margin: 20px 20px;
+        }
+
+        #guiContainer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        select {
+            padding: 3px;
+            margin: 0;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+            -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+            box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+            background: #f8f8f8;
+            color: #888;
+            border: none;
+            outline: none;
+            display: inline-block;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        #score, #displayOptions,.stars {
+            background-color: #fff;
+            padding: 10px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            color: #333;
+        }
+        .stars {
+            background-color: #fff;
+            padding: 10px 0px;
+        }
+
+        #ambient-color-box {
+            font-family: sans-serif;
+            border-radius: 6px;
+            background-color: #ffffff;
+            min-width: 100px;
+            min-height: 50px;
+            position: absolute;
+            top: 50px;
+            left: 0px;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row" id="buttons">
+        <span id="displayOptions">
+            <span class="glyphicon glyphicon-certificate"></span>
+            <input type="checkbox" id="showAmbient">
+            <span class="glyphicon glyphicon-eye-open"></span>
+            <input type="checkbox" id="cameraTop">
+            <span class="glyphicon glyphicon-th-large"></span>
+            <input type="checkbox" id="showPlayground">
+        </span>
+        <button class="btn btn-default" id="reset-vd" type="button">Reset ViewDirection</button>
+        <button class="btn btn-default" id="random-pos" type="button">Randomize Collectables</button>
+        <select id="game-list"></select>
+        <button class="btn btn-success" id="start-game" type="button">Start</button>
+        <button class="btn btn-danger" id="stop-game" type="button">Stop</button>
+        <span id="guiContainer"></span>
+        <span id="score">
+            <span class="stars glyphicon glyphicon-star-empty"></span>
+            <span id="player-scores"> </span>
+        </span>
+        .
+    </div>
+</body>
+
+<!-- <script src="vectorOperations.js"></script> -->
+<script src="communication.js"></script>
+<script src="scene.js"></script>
+<script src="interface.js"></script>
+</html>

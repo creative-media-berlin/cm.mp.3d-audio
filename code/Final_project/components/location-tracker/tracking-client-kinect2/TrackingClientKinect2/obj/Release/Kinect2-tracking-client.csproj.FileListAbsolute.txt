@@ -1,0 +1,11 @@
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\Kinect2-tracking-client.csprojResolveAssemblyReference.cache
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\MainWindow.baml
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\MainWindow.g.cs
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\App.g.cs
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\KinectCoordinateMapping_MarkupCompile.cache
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\KinectCoordinateMapping.g.resources
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\KinectCoordinateMapping.Properties.Resources.resources
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\Kinect2-tracking-client.csproj.GenerateResource.Cache
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\KinectCoordinateMapping.exe
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\obj\Release\KinectCoordinateMapping.pdb
+C:\Users\the_v\mp-interactive-sound-environment\code\Final_project\components\location-tracker\tracking-client-kinect2\KinectCoordinateMapping\bin\Release\KinectCoordinateMapping.exe.config
