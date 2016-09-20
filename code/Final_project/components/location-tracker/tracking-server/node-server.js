@@ -1,9 +1,10 @@
-var mainServerURL = '141.45.207.51'
-var initTime = 10; // time in seconds before 1-player mode is activated
+var mainServerURL = '141.45.205.159' // IP of the main server
+var initTime = 1; // time in seconds before 1-player mode is activated
 var maxZ = 8.04 // room-length = distance in meters between Kinect1 and Kinect2
 var kinectFOV = 63 // Kinect horizontal Field of View, to calculate Playground width
-var distanceToHead = 70
+var distanceToHead = 70 // distance between hip position and head/ears
 
+// object, used to store raw data from both Kinects
 var kinectData = {
 	kinect1: {
 		timestamp: Date.now(),
@@ -17,6 +18,8 @@ var kinectData = {
 	}
 }
 
+// data object used for calculation
+// here Player-1 is always on rawData1 position 1 (Kinect can send inverted data)
 var verifiedKinectData = {
 	kinect1: {
 		rawData1: null,
@@ -27,7 +30,7 @@ var verifiedKinectData = {
 		rawData2: null
 	}
 }
-
+// PlayerMap is used to store Player-ID for comparison
 playerMap = {
 	kinect1: {
 		player1: "11111111111111111",
@@ -63,6 +66,7 @@ var footstepBlockMap = {
 	}
 }
 
+// calculation of the play area
 console.log("complete Kinect area \t| length: " + maxZ + " \t\t| width: " + width.toFixed(2))
 console.log("inner rectangle \t\t| length: " + maxZ*0.5 + " \t| width: " + (width*0.5).toFixed(2))
 
@@ -93,6 +97,9 @@ var server = ws.createServer(function (conn) {
 	} else if (conn.path ==  "/footstep") {
 		console.log("Footsteps socket connected")
 	}
+
+    // timeout: if 2 Players found before timeout, 2-Player mode is activated
+    // else fallback to 1-Payer mode
 	if (kinect1Connected && kinect2Connected) {
 		setTimeout(function(){
 			initTimeUp = true
@@ -109,19 +116,21 @@ var server = ws.createServer(function (conn) {
 			kinectData.kinect1.rawData2 = null
 			kinectData.kinect1.timestamp = Date.now()
 
-			if (Date.now() - kinectData.kinect2.timestamp > 500) {
+            // timestamp invalidates old data
+            if (Date.now() - kinectData.kinect2.timestamp > 500) {
 				kinectData.kinect2.rawData1 = null
 				kinectData.kinect2.rawData2 = null
 				verifiedKinectData.kinect2.rawData1 = null
 				verifiedKinectData.kinect2.rawData2 = null
 			}
 
+			// in case 3 or more players are detected on the playground, the Kinect sends this error message
 			if (incomingString == "Too many players on playground") {
 				console.log("Too many players in Kinect1")
 				tooManyPlayers1 = true
 			} else {
 				tooManyPlayers1 = false
-				// parse string into javascript object and save it to kinectData[0]
+				// parse string into javascript object and save it to kinectData
 				var newValues1 = JSON.parse(incomingString)
 				for (var prop in newValues1) {
 					if (kinectData.kinect1.hasOwnProperty(prop)) {
@@ -143,12 +152,13 @@ var server = ws.createServer(function (conn) {
 				verifiedKinectData.kinect1.rawData2 = null
 			}
 
-			if (incomingString == "Too many players on playground") {
+            // if 3 or more Players are detected by one Kinect, this error message will be received
+            if (incomingString == "Too many players on playground") {
 				console.log("Too many players in Kinect2")
 				tooManyPlayers2 = true
 			} else {
 				tooManyPlayers1 = false
-				// parse string into javascript object and save it to kinectData[1]
+				// parse string into javascript object and save it to kinectData
 				var newValues2 = JSON.parse(incomingString)
 				for (var prop in newValues2) {
 					if (kinectData.kinect2.hasOwnProperty(prop)) {
@@ -157,13 +167,14 @@ var server = ws.createServer(function (conn) {
 				}
 
 			}
+        // calculation for footstep events
 		} else if (conn.path == "/footstep") {
 			var data = JSON.parse(incomingString)
 			var playerId = playerMap[data.kinectNo]["player1"] == data.bodyId ? 1 : 2
 			var blocked = footstepBlockMap[playerId][data.footstep]
 			if(blocked == false) {
-				console.log("Footstep: " + data.footstep)
-				kinectFootstepClientSocket.emit('kinect-footstep-data', {footstep: data.footstep, position: { 'x': data.x, 'z': data.z } })
+				//console.log("Footstep: " + data.footstep)
+				//kinectFootstepClientSocket.emit('kinect-footstep-data', {footstep: data.footstep, position: { 'x': data.x, 'z': data.z } })
 				footstepBlockMap[playerId][data.footstep] = true
 				setTimeout(function() {
 					footstepBlockMap[playerId][data.footstep] = false
@@ -172,25 +183,31 @@ var server = ws.createServer(function (conn) {
 		}
 
 		if (tooManyPlayers1 == false && tooManyPlayers2 == false) {
+		    // initialisation runs for each Kinect separately and is complete when 2 Players are found in each Kinect
+            // when timeout is over, initialisation runs only with 1 Player for each Kinect
 			if ((initTimeUp && (initialComplete1 == false || initialComplete2 == false))
 				|| ((initialComplete1 == false && kinectData.kinect1.rawData1 != null && kinectData.kinect1.rawData2 != null)
 				|| (initialComplete2 == false && kinectData.kinect2.rawData1 != null && kinectData.kinect2.rawData2 != null))) {
 				initializePlayerMap()
 			}
 
-			if (initialComplete1 == true && initialComplete2 == true) { // the whole calculation only runs, when both Kinects are initialized!
-				assignDataToPlayerIds()
+			// the calculation only runs when init for both Kinects is complete (only 1 Kinect will not work)
+			if (initialComplete1 == true && initialComplete2 == true) {
+				assignDataToPlayerIds() // fill verifiedKinectData object
 				var resultPlayer1; var resultPlayer2; var resultFormat
-				if (twoPlayerActive == false) {
+
+                // block for 1-Player mode calculation
+                if (twoPlayerActive == false) {
+				    // in case one Kinect sends an unknown PlayerID, it need to be saved to the PlayerMap
 					if (verifiedKinectData.kinect1.rawData1 == null || verifiedKinectData.kinect2.rawData1 == null) {
-						//console.log("Remap 1-Player mode")
 						remapPlayerIDs()
-						assignDataToPlayerIds()
+                        assignDataToPlayerIds() // fill verifiedKinectData object again
 					}
 					if (verifiedKinectData.kinect1.rawData1 != null || verifiedKinectData.kinect2.rawData1 != null) {
 						resultPlayer1 = calcPos(verifiedKinectData.kinect1.rawData1, verifiedKinectData.kinect2.rawData1)
 					}
 
+					// location format which is sent to the main server
 					resultFormat = {
 						playerLocations: [{
 							Kinect: resultPlayer1.Kinect,
@@ -199,9 +216,11 @@ var server = ws.createServer(function (conn) {
 							hipPosition: resultPlayer1.hipPosition
 						}]
 					}
-					console.log("Player1: " + JSON.stringify(resultPlayer1)) // Console log for 1-Player mode
+					// console.log("Player1: " + JSON.stringify(resultPlayer1)) // Console log for 1-Player mode
 				}
-				if (twoPlayerActive == true) {
+
+                // block for 2-Player mode calculation
+                if (twoPlayerActive == true) {
 					// if one of the verified data slots is empty, try a remap
 					if (verifiedKinectData.kinect1.rawData1 == null
 						|| verifiedKinectData.kinect1.rawData2 == null
@@ -209,12 +228,13 @@ var server = ws.createServer(function (conn) {
 						|| verifiedKinectData.kinect2.rawData2 == null) {
 						// console.log("Remap 2-Player mode")
 						remapPlayerIDs()
-						assignDataToPlayerIds()
+						assignDataToPlayerIds() // fill verifiedKinectData object again
 					}
-
 					var playerLocations = []
-					if (verifiedKinectData.kinect1.rawData1 != null || verifiedKinectData.kinect2.rawData1 != null) {
-						resultPlayer1 = calcPos(verifiedKinectData.kinect1.rawData1, verifiedKinectData.kinect2.rawData1)
+
+                    // player-1 location calculation + format which is sent to the main server
+                    if (verifiedKinectData.kinect1.rawData1 != null || verifiedKinectData.kinect2.rawData1 != null) {
+					    resultPlayer1 = calcPos(verifiedKinectData.kinect1.rawData1, verifiedKinectData.kinect2.rawData1)
 						if (resultPlayer1) {
 							playerLocations.push({
 								Kinect: resultPlayer1.Kinect,
@@ -224,8 +244,10 @@ var server = ws.createServer(function (conn) {
 							})
 						}
 					}
-					if  (verifiedKinectData.kinect1.rawData2 != null || verifiedKinectData.kinect2.rawData2 != null) {
-						resultPlayer2 = calcPos(verifiedKinectData.kinect1.rawData2, verifiedKinectData.kinect2.rawData2)
+
+                    // player-2 location calculation + format which is sent to the main server
+                    if  (verifiedKinectData.kinect1.rawData2 != null || verifiedKinectData.kinect2.rawData2 != null) {
+                        resultPlayer2 = calcPos(verifiedKinectData.kinect1.rawData2, verifiedKinectData.kinect2.rawData2)
 						if (resultPlayer2) {
 							playerLocations.push({
 								Kinect: resultPlayer2.Kinect,
@@ -235,13 +257,21 @@ var server = ws.createServer(function (conn) {
 							})
 						}
 					}
-
 					resultFormat = {
 						playerLocations: playerLocations
 					}
 
+					// dead end of the algorithm:
+                    // when in 2-Player mode one Player is already lost and the second Player gets lost too
+                    // the assignment of Player-1 and Player-2 can't be achieved anymore
+                    // a restart is required to assign the PlayerID's again based on their start position
+					if (resultPlayer1 == undefined && resultPlayer2 == undefined) {
+						console.log("Both Players lost!!! Restart required ")
+					}
 					//console.log("Player1: " + JSON.stringify(resultPlayer1) + " || Player2: " + JSON.stringify(resultPlayer2)) // Console log for 2-Player mode
 				}
+
+				// sending the calculated result to the main server
 				if (mainServerConnected) {
 					kinectLocationsClientSocket.emit('kinect-location-data', resultFormat)
 				}
@@ -259,6 +289,9 @@ var server = ws.createServer(function (conn) {
 		console.log("One connection to main server closed.")
 	})
 }).listen(8001)
+
+// the idea is: when one specific Player is detected by both Kinects, use the Kinect which is more close to that Player (z-coordinate)
+// in case one Player is only detected by one Kinect, this data will be used
 
 // calcPos will be called for one specific player, but with both data sources (both Kinects)
 // e.g. Player1 in Kinect1 and Player1 in Kinect2
@@ -295,6 +328,7 @@ function calcPos(rawDataKinect1, rawDataKinect2) {
 	}
 }
 
+// function to calculate the width of the playground
 function calcWidth() {
 	var rad = (kinectFOV/2) * Math.PI/180;
 	var tan = Math.tan(rad)
@@ -302,6 +336,7 @@ function calcWidth() {
 	return (((maxZ / 2) * tan) * 2)
 }
 
+// function to fill the PlayerMap object initially
 function initializePlayerMap() {
 	if ((kinectData.kinect1.rawData1 != null && kinectData.kinect1.rawData2 != null)
 		|| (kinectData.kinect2.rawData1 != null && kinectData.kinect2.rawData2 != null)) {
@@ -364,6 +399,7 @@ function initializePlayerMap() {
 	}
 }
 
+// function which looks up PlayerID in PlayerMap and then fills the verifiedKinectData object
 function assignDataToPlayerIds() {
 	verifiedKinectData.kinect1.rawData1 = null;
 	verifiedKinectData.kinect1.rawData2 = null;
@@ -410,20 +446,9 @@ function assignDataToPlayerIds() {
 			verifiedKinectData.kinect2.rawData2 = kinectData.kinect2.rawData1
 		}
 	}
-
-	/*var bool1 = kinectData.kinect1.rawData1 != null
-	var bool2 = verifiedKinectData.kinect1.rawData1 != null
-	var bool3 = kinectData.kinect1.rawData2  != null
-	var bool4 = verifiedKinectData.kinect1.rawData2 != null
-	console.log("rawData-K1-P1: " +  bool1 + " | verified-K1-P1: " + bool2 + " | rawData-K1-P2: " +  bool3 + " | verified-K1-P2: " +  bool4)
-
-	var bool5 = kinectData.kinect2.rawData1 != null
-	var bool6 = verifiedKinectData.kinect2.rawData1 != null
-	var bool7 = kinectData.kinect2.rawData2  != null
-	var bool8 = verifiedKinectData.kinect2.rawData2 != null
-	console.log("rawData-K2-P1: " +  bool5 + " | verified-K2-P1: " + bool6 + " | rawData-K2-P2: " +  bool7 + " | verified-K2-P2: " +  bool8  + "\n")*/
 }
 
+// function to re-assign PlayerID's in case a Player gets lost (unknown Player in raw data)
 function remapPlayerIDs() {
 	if (twoPlayerActive == false) {
 		if (verifiedKinectData.kinect1.rawData1 == null && kinectData.kinect1.rawData1 != null) {
@@ -493,7 +518,7 @@ function remapPlayerIDs() {
 			var tempPlayer2 = calcPos(null, verifiedKinectData.kinect2.rawData2)
 
 			if (kinectData.kinect1.rawData1 != null) {
-				console.log("K2-VP1 true + K2-VP2 true | K1-rawData-1 ")
+				//console.log("K2-VP1 true + K2-VP2 true | K1-rawData-1 ")
 				var playerX = calcPos(kinectData.kinect1.rawData1, null)
 				if (between(playerX.hipPosition.x, tempPlayer1.hipPosition.x - radius, tempPlayer1.hipPosition.x + radius)
 					&& !(between(playerX.hipPosition.x, tempPlayer2.hipPosition.x - radius, tempPlayer2.hipPosition.x + radius))) {
@@ -505,7 +530,7 @@ function remapPlayerIDs() {
 					console.log("Remap successful")
 				}
 			} else if (kinectData.kinect1.rawData2 != null) {
-				console.log("K2-VP1 true + K2-VP2 true | K1-rawData-2 ")
+				//console.log("K2-VP1 true + K2-VP2 true | K1-rawData-2 ")
 				var playerY = calcPos(kinectData.kinect1.rawData2, null)
 				if (between(playerY.hipPosition.x, tempPlayer1.hipPosition.x - radius, tempPlayer1.hipPosition.x + radius)
 					&& !(between(playerY.hipPosition.x, tempPlayer2.hipPosition.x - radius, tempPlayer2.hipPosition.x + radius))) {
@@ -526,7 +551,7 @@ function remapPlayerIDs() {
 			var tempPlayer2 = calcPos(verifiedKinectData.kinect1.rawData2, null)
 
 			if (kinectData.kinect2.rawData1 != null) {
-				console.log("K1-VP1 true + K1-VP2 true | K2-rawData-1 ")
+				//console.log("K1-VP1 true + K1-VP2 true | K2-rawData-1 ")
 				var playerX = calcPos(null, kinectData.kinect2.rawData1)
 				if (between(playerX.hipPosition.x, tempPlayer1.hipPosition.x - radius, tempPlayer1.hipPosition.x + radius)
 					&& !(between(playerX.hipPosition.x, tempPlayer2.hipPosition.x - radius, tempPlayer2.hipPosition.x + radius))) {
@@ -538,7 +563,7 @@ function remapPlayerIDs() {
 					console.log("Remap successful")
 				}
 			} else if (kinectData.kinect2.rawData2 != null) {
-				console.log("K1-VP1 true + K1-VP2 true | K2-rawData-2 ")
+				//console.log("K1-VP1 true + K1-VP2 true | K2-rawData-2 ")
 				var playerY = calcPos(null, kinectData.kinect2.rawData2)
 				if (between(playerY.hipPosition.x, tempPlayer1.hipPosition.x - radius, tempPlayer1.hipPosition.x + radius)
 					&& !(between(playerY.hipPosition.x, tempPlayer2.hipPosition.x - radius, tempPlayer2.hipPosition.x + radius))) {
@@ -556,6 +581,7 @@ function remapPlayerIDs() {
 	}
 }
 
+// help function to calculate radius around player position
 function between(x, min, max) {
 	return x >= min && x <= max;
 }
