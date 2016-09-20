@@ -2,20 +2,24 @@
 
 ## How to run?
 
-
-* enable/disable dummy clients (if needed):
-  * go to folder`/server-game-logic/frontend/demo-clients`
-  * enable/disable dummy clients by commenting in or out the `<script>` tags inside the `index.html`
 * start app:
   * go to folder `/server-game-logic`
   * before you run it for the first time: run `npm install`
   * execute `node app`
   * find server ip in log
+* start game master
+    * go to folder `/components/game-master`
+    * run server (e.g. `python -m SimpleHTTPServer 3000`)
+    * open url `localhost:3000` in browser
 * open player app in browser:
   * open URL: `<server ip>:8881/player` best case on mobile phone
+
+* **Mock clients**:
+* enable/disable dummy clients (if needed):
+  * go to folder`/server-game-logic/frontend/demo-clients`
+  * enable/disable dummy clients by commenting in or out the `<script>` tags inside the `index.html`
 * open demo-clients app in browser (so watch console logs e.g.):
   * open URL: `<server ip>:8882/demo-clients`
-
 
 
 ## Development notes:
@@ -25,7 +29,6 @@
     * after adding new files to `/js` directory or editing existing run webpack build script
         * go to `/public/js/
         * run command `webpack`
-
 
 ## Client connection:
 
@@ -63,3 +66,14 @@
             * `socket.on('player-footsteps-positions')`
             * `socket.on('points-update', playerId)`
             * `socket.on('level-update')`
+
+
+## Add levels
+
+* add audio files to : `/server-game-logic/public/resources/audio/levelX/`
+* create new collectable, ambient, foot step sound objects
+    * files:
+        * `collectableCollection.js`
+        * `collectableSoundCollection.js`
+        * `ambientSoundCollection.js`
+        * `footstepSoundCollection.js`
