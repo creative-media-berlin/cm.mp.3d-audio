@@ -128,6 +128,6 @@ var SoundTypes = {
   PLAYER_2_WON:         "/player/resources/audio/announcements/anno_player2_won_game.mp3",
   SERACH_HINT_LEVEL1:     "/player/resources/audio/announcements/anno_cat.mp3",
   SERACH_HINT_LEVEL2:     "/player/resources/audio/announcements/anno_mobilePhones.mp3",
-  SERACH_HINT_LEVEL4:     "/player/resources/audio/announcements/anno_music_synths.mp3",
-  SERACH_HINT_LEVEL3:     "/player/resources/audio/announcements/anno_birds.mp3"
+  SERACH_HINT_LEVEL3:     "/player/resources/audio/announcements/anno_birds.mp3",
+  SERACH_HINT_LEVEL4:     "/player/resources/audio/announcements/anno_music_synths.mp3"
 }

@@ -15,9 +15,3 @@ gameController.startNewGame(function(){
 
 locationUpdateController = new LocationUpdateController(dataManager)
 locationUpdateController.listenForLocationUpdates(serverSocket)
-
-// viewDirectionUpdateController = require('./controllers/viewDirectionUpdateController.js')(dataManager)
-// viewDirectionUpdateController.listenForViewDirectionUpdates(serverSocket)
-//
-// collectablesUpdateController = require('./controllers/collectablesUpdateController.js')(dataManager)
-// collectablesUpdateController.listenForCollectableLocationUpdates(serverSocket)

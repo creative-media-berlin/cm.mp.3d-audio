@@ -44,8 +44,8 @@ var SoundTypes = {
   SAND_LEFT1: "/player/resources/audio/level1/footsteps/footSingleStep2.mp3",
   SAND_RIGHT2: "/player/resources/audio/level2/footsteps/footSingleStep1.mp3",
   SAND_LEFT2: "/player/resources/audio/level2/footsteps/footSingleStep2.mp3",
-  SAND_RIGHT3: "/player/resources/audio/level3/footsteps/footSingleStep1.mp3",
-  SAND_LEFT3: "/player/resources/audio/level3/footsteps/footSingleStep2.mp3",
-  SAND_RIGHT4: "/player/resources/audio/level4/footsteps/wo_footStep1.mp3",
-  SAND_LEFT4: "/player/resources/audio/level4/footsteps/wo_footStep2.mp3"
+  SAND_RIGHT4: "/player/resources/audio/level3/footsteps/wo_footStep1.mp3",
+  SAND_LEFT4: "/player/resources/audio/level3/footsteps/wo_footStep2.mp3",
+  SAND_RIGHT3: "/player/resources/audio/level4/footsteps/footSingleStep1.mp3",
+  SAND_LEFT3: "/player/resources/audio/level4/footsteps/footSingleStep2.mp3"
 }

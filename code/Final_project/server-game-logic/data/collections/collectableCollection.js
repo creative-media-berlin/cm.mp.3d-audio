@@ -90,17 +90,18 @@ var LevelCollectables = function () {
 var SoundTypes = {
 //  ORB: "/player/resources/audio/level1/collectables/soundOrb.mp3",
   CAT: "/player/resources/audio/level1/collectables/cat.mp3",
-  PLATTFORM_1: "/player/resources/audio/level2/collectables/mu_platform1.mp3",
-  PLATTFORM_2: "/player/resources/audio/level2/collectables/mu_platform2.mp3",
-  PLATTFORM_3: "/player/resources/audio/level2/collectables/mu_platform3.mp3",
-  PLATTFORM_4: "/player/resources/audio/level2/collectables/mu_platform4.mp3",
 
-  RINGTONE1: "/player/resources/audio/level3/collectables/ts_ringtone1.mp3",
-  RINGTONE2: "/player/resources/audio/level3/collectables/ts_ringtone2.mp3",
-  RINGTONE3: "/player/resources/audio/level3/collectables/ts_ringtone3.mp3",
-  RINGTONE4: "/player/resources/audio/level3/collectables/ts_ringtone4.mp3",
+  RINGTONE1: "/player/resources/audio/level2/collectables/ts_ringtone1.mp3",
+  RINGTONE2: "/player/resources/audio/level2/collectables/ts_ringtone2.mp3",
+  RINGTONE3: "/player/resources/audio/level2/collectables/ts_ringtone3.mp3",
+  RINGTONE4: "/player/resources/audio/level2/collectables/ts_ringtone4.mp3",
 
-  BIRD1: "/player/resources/audio/level4/collectables/wo_bird1.mp3",
-  BIRD2: "/player/resources/audio/level4/collectables/wo_bird2.mp3",
-  BIRD3: "/player/resources/audio/level4/collectables/wo_bird3.mp3"
+  BIRD1: "/player/resources/audio/level3/collectables/wo_bird1.mp3",
+  BIRD2: "/player/resources/audio/level3/collectables/wo_bird2.mp3",
+  BIRD3: "/player/resources/audio/level3/collectables/wo_bird3.mp3",
+
+  PLATTFORM_1: "/player/resources/audio/level4/collectables/mu_platform1.mp3",
+  PLATTFORM_2: "/player/resources/audio/level4/collectables/mu_platform2.mp3",
+  PLATTFORM_3: "/player/resources/audio/level4/collectables/mu_platform3.mp3",
+  PLATTFORM_4: "/player/resources/audio/level4/collectables/mu_platform4.mp3"
 }

@@ -5,7 +5,7 @@ var sender = null
 
 kinectLocationsClientSocket.on('connect', function () {
   document.getElementById("kinect-demo-state").style.backgroundColor = "green";
-  sender = setInterval(startSendingLocations, 100);
+  sender = setInterval(startSendingLocations, 1000);
   // sender = setInterval(startSendingFixedLocations, 100);
   startRoomDimensions()
 });
