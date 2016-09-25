@@ -77,3 +77,56 @@
         * `collectableSoundCollection.js`
         * `ambientSoundCollection.js`
         * `footstepSoundCollection.js`
+
+
+
+# Client Server app
+
+* includes Sound app 
+
+* [How to identify a player?](#how-to-identify-a-player)
+    *  [From Kinect](#from-kinect)
+    *  [From server side - registration on mobile](#from-server-side-registration-on-mobile)
+
+-----
+
+## How to identify a player?
+
+### From Kinect
+
+* player (`bodyId`) standing left is mapped to player 1
+* player (`bodyId`) standing right is mapped to player 2
+
+### From server side - registration on mobile
+
+> :zap: Being able to connect to server as a player and mapping to a unique player id on Kinect and server side
+
+> :paperclip: [commit](https://gitlab.cm.htw-berlin.de/studentenprojekte/mp-interactive-sound-environment/commit/5a2b00d09a60335984236dd0ab086a577b80f3d8)
+
+* goal: user on mobile can click a button to register as player 1 or 2
+* player 1 has to stand left and player 2 right (that mapping with kinect works)
+
+ ![Screen_Shot_2016-06-12_at_16.55.06](https://github.com/creative-media-berlin/cm.mp.3d-audio/wiki/Images/server/image1.png)
+
+*  when player 1 presses `player 1` button the server will create a new player and add it to the collection. The socket will be stores as property of the player
+
+![Screen_Shot_2016-06-12_at_16.47.26](https://github.com/creative-media-berlin/cm.mp.3d-audio/wiki/Images/server/image2.png)
+
+* same for player 2
+
+![Screen_Shot_2016-06-12_at_16.47.49](https://github.com/creative-media-berlin/cm.mp.3d-audio/wiki/Images/server/image3.png)
+
+* when a player attempts to register again (e.g. due to network interruption) the new socket will be added to the existing player instance
+
+![Screen_Shot_2016-06-12_at_16.48.17](https://github.com/creative-media-berlin/cm.mp.3d-audio/wiki/Images/server/image4.png)
+
+![Screen_Shot_2016-06-12_at_16.48.06](https://github.com/creative-media-berlin/cm.mp.3d-audio/wiki/Images/server/image5.png)
+
+
+* to disable the option that a player can register for both player ids the button of the second player gets disabled after player felt a decision
+
+![Screen_Shot_2016-06-12_at_17.18.12](https://github.com/creative-media-berlin/cm.mp.3d-audio/wiki/Images/server/image6.png)
+
+* player mobile interface:
+
+![Photo_Jun_12__18_43_25](https://github.com/creative-media-berlin/cm.mp.3d-audio/wiki/Images/server/image7.png)![Photo_Jun_12__18_43_17](https://github.com/creative-media-berlin/cm.mp.3d-audio/wiki/Images/server/image8.png)
