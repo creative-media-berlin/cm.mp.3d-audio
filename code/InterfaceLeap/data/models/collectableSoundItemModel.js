@@ -1,4 +1,0 @@
-// CollectableSoundItemModel
-module.exports = {
-
-}

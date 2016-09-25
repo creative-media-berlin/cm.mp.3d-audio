@@ -1,3 +1,0 @@
-var = soundDictionary = {
-    "Beach": "./"
-}
