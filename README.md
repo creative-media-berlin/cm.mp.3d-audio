@@ -1,13 +1,15 @@
 Headio
 =======
 
+
 > This project is the result of a two semester Master-Program course at the HTW Berlin. We developed a game that allows the users to jump into an imaginary world. The world is based on a manipulated 3D sound environment which could be a setting of a forest or a beach, for example. Headphones with attached mobile phones are used to feed the player with 3D sound, calculated directly in the phone's browser via the Web Audio API. The user relies on his sense of hearing to orientate through the scene. In addition to the ambient sound, we will introduce moving items, which can be distinguished by a remarkable sound. Their function is to be caught or collected by the player or even by one of the player in a multiplayer game. 
 
 > In a single player game the player wins when he collects a specific amount of those items, whereas in a multi player version the game ends after all items are collected and the player with the most collected items wins.
 
 > The over all purpose of this project is the creation of a pure audio base experience, far away from the ordinary way to interact via a visual interface.  
 
-> Additionally we introduced a Game-Master, who can see the overall playground with all collectable and ambient sounds. His purpose is to the overview the entire game and to start and stop a round. But more importantly he has also the ability to move the collectable sounds inside the 3D sound space via the Leap Motion Interface. 
+> Additionally we introduced a Game-Master, who can see the overall playground with all collectable and ambient sounds. His purpose is to overview the entire game and to start and stop a round. But more importantly he has also the ability to move the collectable sounds inside the 3D sound space via the Leap Motion Interface. 
+
 
 
 This project mainly consists of the following.
