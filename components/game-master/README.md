@@ -1,6 +1,6 @@
 # Game-Master Documentation
 
-![game-master-screen](/uploads/456afc769865d8c56c3ccfc0ed61d87d/game-master-screen.png)
+![game-master-screen](https://github.com/creative-media-berlin/cm.mp.3d-audio/wiki/Images/game-master/image1.png)
 
 #### Index
 1. [Dependecies](#dependencies)
